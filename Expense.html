@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('Mountain2.jpg');
+            background-size: cover;          
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #expense-container {
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            border-radius: 12px;
+            backdrop-filter: blur(20px) saturate(100%);
+            -webkit-backdrop-filter: blur(10px) saturate(100%);
+            background-color: rgba(40, 38, 38, 0.7);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input {
+            width: 100%;
+            font-size: 16px;
+            padding: 12px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #333;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px; /* Adjusted button size */
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            color: white;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+        h2, p {
+            color: white;
+            text-align: center;
+        }
+
+        span {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="expense-container">
+        <h2>Expense Tracker</h2>
+        <input type="text" id="expenseName" placeholder="Expense Name">
+        <input type="number" id="expenseAmount" placeholder="Expense Amount">
+        <button onclick="addExpense()">Add Expense</button>
+        <ul id="expenseList"></ul>
+        <p>Total Expenses: $<span id="totalExpenses">0.00</span></p>
+    </div>
+
+    <script>
+        let expenses = [];
+
+        // Load expenses from local storage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const storedExpenses = JSON.parse(localStorage.getItem('expenses'));
+            if (storedExpenses) {
+                expenses = storedExpenses;
+                updateExpenseList();
+                updateTotalExpenses();
+            }
+        });
+
+        function addExpense() {
+            const name = document.getElementById('expenseName').value;
+            const amount = parseFloat(document.getElementById('expenseAmount').value);
+
+            if (name && !isNaN(amount)) {
+                expenses.push({ name, amount });
+                updateExpenseList();
+                updateTotalExpenses();
+                saveToLocalStorage();
+                clearInputs();
+            }
+        }
+
+        function deleteExpense(index) {
+            expenses.splice(index, 1);
+            updateExpenseList();
+            updateTotalExpenses();
+            saveToLocalStorage();
+        }
+
+        function editExpense(index) {
+            const newName = prompt('Enter new expense name:');
+            const newAmount = parseFloat(prompt('Enter new expense amount:'));
+
+            if (newName !== null && !isNaN(newAmount)) {
+                expenses[index] = { name: newName, amount: newAmount };
+                updateExpenseList();
+                updateTotalExpenses();
+                saveToLocalStorage();
+            }
+        }
+
+        function updateExpenseList() {
+            const expenseList = document.getElementById('expenseList');
+            expenseList.innerHTML = '';
+
+            expenses.forEach((expense, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `${expense.name}: $${expense.amount.toFixed(2)}`;
+                
+                // Add delete button
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteExpense(index);
+                li.appendChild(deleteButton);
+
+                // Add edit button
+                const editButton = document.createElement('button');
+                editButton.textContent = 'Edit';
+                editButton.onclick = () => editExpense(index);
+                li.appendChild(editButton);
+
+                expenseList.appendChild(li);
+            });
+        }
+
+        function updateTotalExpenses() {
+            const totalExpenses = document.getElementById('totalExpenses');
+            const total = expenses.reduce((sum, expense) => sum + expense.amount, 0);
+            totalExpenses.textContent = total.toFixed(2);
+        }
+
+        function clearInputs() {
+            document.getElementById('expenseName').value = '';
+            document.getElementById('expenseAmount').value = '';
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('expenses', JSON.stringify(expenses));
+        }
+    </script>
+</body>
+</html>
+
+
+🚀 Exciting Update from my Web Development Internship at CodeAlpha! 🚀
+
+Thrilled to share that I've successfully completed the second task of my internship journey! 🌐✨ During this phase, I had the incredible opportunity to build a robust Expense Tracker using a combination of HTML, CSS, and JavaScript. 💻💡
+
+This project not only honed my coding skills but also provided hands-on experience in creating a user-friendly interface and implementing efficient functionalities. 💼🌐
